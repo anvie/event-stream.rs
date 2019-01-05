@@ -1,7 +1,8 @@
-#[macro_use]
-extern crate crossbeam_channel as cc;
 
-use cc::{unbounded, Sender, Receiver};
+#[macro_use]
+extern crate crossbeam_channel;
+
+use crossbeam_channel::{unbounded, Sender, Receiver};
 
 use std::{
     thread,
