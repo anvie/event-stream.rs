@@ -9,7 +9,7 @@ pub trait EventListener<T>
 where
     T: Sync + Send,
 {
-    fn dispatch(&self, event: &T);
+    fn dispatch(&self, _event: &T) {}
 }
 
 pub struct EventDispatcher<T> {
@@ -56,10 +56,7 @@ where
     T: Sized + Send + Sync + 'static,
 {
     pub fn emit(&self, event: T) {
-        match self.tx.send(event) {
-            Err(e) => println!("error: {}", e),
-            _ => (),
-        }
+        let _ = self.tx.send(event).expect("cannot send via channel");
     }
 
     pub fn start(&self) {

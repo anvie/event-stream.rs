@@ -4,12 +4,13 @@ extern crate event_stream;
 
 use event_stream::{EventDispatcherBuilder, EventListener};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Event {
     Ping,
     Hello(String),
 }
 
+#[derive(Clone)]
 struct MyListener;
 
 impl MyListener {
@@ -37,6 +38,8 @@ fn main() {
     let event_dispatcher = EventDispatcherBuilder::new()
         .add_listener(MyListener::new())
         .build();
+
+    event_dispatcher.start();
 
     sleep(Duration::from_secs(1));
 
