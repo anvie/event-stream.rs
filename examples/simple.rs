@@ -1,23 +1,13 @@
-
-use std::{
-    env,
-    time::Duration,
-    sync::Arc,
-    thread::{self, sleep}
-};
+use std::{env, sync::Arc, thread::sleep, time::Duration};
 
 extern crate event_stream;
 
-use event_stream::{
-    EventDispatcherBuilder,
-    EventListener
-};
-
+use event_stream::{EventDispatcherBuilder, EventListener};
 
 #[derive(Debug)]
 enum Event {
     Ping,
-    Hello(String)
+    Hello(String),
 }
 
 struct MyListener;
@@ -29,7 +19,7 @@ impl MyListener {
 }
 
 impl EventListener<Event> for MyListener {
-    fn dispatch(&self, event: &Event){
+    fn dispatch(&self, event: &Event) {
         println!("{:?} got event: {:?}", self, event);
     }
 }
@@ -40,9 +30,7 @@ impl std::fmt::Debug for MyListener {
     }
 }
 
-
 fn main() {
-
     env::set_var("RUST_LOG", "simple=debug");
     env::set_var("RUST_BACKTRACE", "1");
 
@@ -53,7 +41,7 @@ fn main() {
     sleep(Duration::from_secs(1));
 
     event_dispatcher.emit(Event::Ping);
-    
+
     sleep(Duration::from_secs(1));
 
     event_dispatcher.emit(Event::Hello("world".to_string()));
@@ -62,5 +50,3 @@ fn main() {
 
     println!("done.");
 }
-
-
