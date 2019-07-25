@@ -5,7 +5,6 @@ Event Stream
 [![Build status](https://ci.appveyor.com/api/projects/status/cmepe8rq71e4xvph?svg=true)](https://ci.appveyor.com/project/anvie/dotext-ijt7q)
 
 
-
 Simple message passing library for Rust.
 
 
