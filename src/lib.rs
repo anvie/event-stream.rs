@@ -62,16 +62,39 @@ where
     pub fn start(&self) {
         let rx_thread = self.rx.clone();
         let listeners = self.listeners.clone();
+        let mut tried = 0;
 
         thread::spawn(move || loop {
-            select! {
-                recv(rx_thread) -> msg => {
-                    for listener in listeners.iter() {
-                        if let Ok(event) = &msg {
-                            listener.dispatch(&event);
+            let rx_thread_c = rx_thread.clone();
+            let listeners_c = listeners.clone();
+            let h = thread::spawn(move || loop {
+                select! {
+                    recv(rx_thread_c) -> msg => {
+                        for listener in listeners_c.iter() {
+                            if let Ok(event) = &msg {
+                                listener.dispatch(&event);
+                            }
                         }
                     }
                 }
+            });
+
+            let r = h.join();
+            match r {
+                Ok(r) => eprintln!("event dispatcher thread ended! {:?}", r),
+                Err(e) => {
+                    eprintln!("event dispatcher thread died! {:?}", e);
+                }
+            }
+
+            eprintln!("Starting new event dispatcher thread again...");
+            tried = tried + 1;
+            if tried >= 100 {
+                eprintln!(
+                    "event dispatcher thread cannot be started after {} attempts!",
+                    tried
+                );
+                break;
             }
         });
     }
