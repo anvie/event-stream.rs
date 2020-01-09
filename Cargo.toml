@@ -1,7 +1,7 @@
 [package]
 name = "event-stream"
 description = "Simple message passing library for Rust"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["robin <r@ansvia.com>"]
 edition = "2018"
 license = "MIT"
